@@ -45,32 +45,45 @@ type Account struct {
 	balance       float64
 }
 
+type Message string
+
+const (
+	OperationSuccessfully Message = "Operation made successfully, thanks for using our services!"
+	InsufficientFunds             = "Insufficient funds, we couldn't achieve your request!"
+)
+
 func timeToCalculations() {
 	time.Sleep(1 * time.Second)
 }
 
-func (account *Account) withdraw(requestedValue float64) string {
+func messageAfterOperation(account *Account) {
+	fmt.Printf("(%s) Balance after operation -> %.2f\n", account.holderName, account.balance)
+}
+
+func (account *Account) withdraw(requestedValue float64) Message {
 	timeToCalculations()
 
 	allowed := requestedValue > 0 && requestedValue <= account.balance
 	if allowed {
 		account.balance -= requestedValue
-		fmt.Println("Balance after withdraw -> ", account.balance)
-		return "Withdrawal made successfully, thanks for using our services!"
+		messageAfterOperation(account)
+
+		return OperationSuccessfully
 	} else {
 		fmt.Println("Your balance -> ", account.balance)
-		return "Insufficient funds, we couldn't achieve your request!"
+		return InsufficientFunds
 	}
 }
 
-func (account *Account) deposit(requestedValue float64) string {
+func (account *Account) deposit(requestedValue float64) Message {
 	timeToCalculations()
 
 	allowed := requestedValue > 0
 	if allowed {
 		account.balance += requestedValue
-		fmt.Println("Balance after deposit -> ", account.balance)
-		return "Deposit made successfully, thanks for using our services!"
+		messageAfterOperation(account)
+
+		return OperationSuccessfully
 	} else {
 		fmt.Println("Your balance -> ", account.balance)
 		return "Insufficient funds, we couldn't achieve your request!"
@@ -78,18 +91,43 @@ func (account *Account) deposit(requestedValue float64) string {
 
 }
 
+func (account *Account) transfer(requestedValue float64, destinationAccount *Account) Message {
+	timeToCalculations()
+
+	allowed := requestedValue > 0 && account.balance >= requestedValue
+	if allowed {
+		account.balance -= requestedValue
+		destinationAccount.balance += requestedValue
+		messageAfterOperation(account)
+
+		return OperationSuccessfully
+	} else {
+		fmt.Println("Your balance -> ", account.balance)
+		return InsufficientFunds
+	}
+
+}
+
 func main() {
-	newAccount := Account{"Ramos", 123, 9837, 30.5}
-	fmt.Println("Initial balance -> ", newAccount.balance)
-
-	fmt.Println("Trying withdraw operation with 13...")
-	fmt.Println(newAccount.withdraw(13))
-	fmt.Println("")
-	fmt.Println("Trying withdraw operation with 130...")
-	fmt.Println(newAccount.withdraw(130))
+	firstAccount := Account{"Ramos", 123, 9837, 30.5}
+	secondAccount := Account{"Silvia", 123, 9838, 130.5}
+	fmt.Printf("Initial balance(%s) -> %.2f\n", firstAccount.holderName, firstAccount.balance)
+	fmt.Printf("Initial balance(%s) -> %.2f\n", secondAccount.holderName, secondAccount.balance)
 
 	fmt.Println("")
-	fmt.Println("Trying deposit operation with 130...")
-	fmt.Println(newAccount.deposit(130))
+	fmt.Printf("(%s) Trying withdraw operation with 13...\n", firstAccount.holderName)
+	fmt.Println(firstAccount.withdraw(13))
+	fmt.Println("")
+	fmt.Printf("(%s) Trying withdraw operation with 130...\n", firstAccount.holderName)
+	fmt.Println(firstAccount.withdraw(130))
 
+	fmt.Println("")
+	fmt.Printf("(%s) Trying deposit operation with 130...\n", firstAccount.holderName)
+	fmt.Println(firstAccount.deposit(130))
+
+	fmt.Println("")
+	fmt.Printf("Actual balance(%s) -> %.2f\n", secondAccount.holderName, secondAccount.balance)
+	fmt.Printf("(%s) Trying transfer operation with 100 to (%s)...\n", secondAccount.holderName,
+		firstAccount.holderName)
+	fmt.Println(secondAccount.transfer(100, &firstAccount))
 }
