@@ -2,11 +2,12 @@ package accounts
 
 import (
 	"fmt"
+	"golang-bank/customers"
 	"time"
 )
 
 type CheckingAccount struct {
-	HolderName    string
+	Owner         customers.AccountOwner
 	BranchCode    int
 	AccountNumber int
 	Balance       float64
@@ -24,7 +25,7 @@ func timeToCalculations() {
 }
 
 func messageAfterOperation(account *CheckingAccount) {
-	fmt.Printf("(%s) Balance after operation -> %.2f\n", account.HolderName, account.Balance)
+	fmt.Printf("(%s) Balance after operation -> %.2f\n", account.Owner.Name, account.Balance)
 }
 
 func (account *CheckingAccount) Withdraw(requestedValue float64) Message {
