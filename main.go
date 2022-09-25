@@ -39,8 +39,8 @@ func comparisonTypes() {
 }
 
 func main() {
-	firstAccount := c.CheckingAccount{"Ramos", 123, 9837, 30.5}
-	secondAccount := c.CheckingAccount{"Silvia", 123, 9838, 130.5}
+	firstAccount := c.CheckingAccount{HolderName: "Ramos", BranchCode: 123, AccountNumber: 9837, Balance: 30.5}
+	secondAccount := c.CheckingAccount{HolderName: "Silvia", BranchCode: 123, AccountNumber: 9838, Balance: 130.5}
 	fmt.Printf("Initial balance(%s) -> %.2f\n", firstAccount.HolderName, firstAccount.Balance)
 	fmt.Printf("Initial balance(%s) -> %.2f\n", secondAccount.HolderName, secondAccount.Balance)
 
