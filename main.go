@@ -5,27 +5,6 @@ import (
 	"time"
 )
 
-type Account struct {
-	holderName    string
-	branchCode    int
-	accountNumber int
-	balance       float64
-}
-
-func (account *Account) withdraw(requestedValue float64) string {
-	time.Sleep(2 * time.Second)
-
-	allowed := requestedValue > 0 && requestedValue <= account.balance
-	if allowed {
-		account.balance -= requestedValue
-		fmt.Println("Balance after withdraw -> ", account.balance)
-		return "Withdrawal made successfully, thanks for using our services!"
-	} else {
-		fmt.Println("Your balance -> ", account.balance)
-		return "Insufficient funds, we couldn't achieve your request!"
-	}
-}
-
 func namedParameters() {
 	var holderName string = "Ramos"
 	var branchCode int = 589
@@ -59,6 +38,46 @@ func comparisonTypes() {
 
 }
 
+type Account struct {
+	holderName    string
+	branchCode    int
+	accountNumber int
+	balance       float64
+}
+
+func timeToCalculations() {
+	time.Sleep(1 * time.Second)
+}
+
+func (account *Account) withdraw(requestedValue float64) string {
+	timeToCalculations()
+
+	allowed := requestedValue > 0 && requestedValue <= account.balance
+	if allowed {
+		account.balance -= requestedValue
+		fmt.Println("Balance after withdraw -> ", account.balance)
+		return "Withdrawal made successfully, thanks for using our services!"
+	} else {
+		fmt.Println("Your balance -> ", account.balance)
+		return "Insufficient funds, we couldn't achieve your request!"
+	}
+}
+
+func (account *Account) deposit(requestedValue float64) string {
+	timeToCalculations()
+
+	allowed := requestedValue > 0
+	if allowed {
+		account.balance += requestedValue
+		fmt.Println("Balance after deposit -> ", account.balance)
+		return "Deposit made successfully, thanks for using our services!"
+	} else {
+		fmt.Println("Your balance -> ", account.balance)
+		return "Insufficient funds, we couldn't achieve your request!"
+	}
+
+}
+
 func main() {
 	newAccount := Account{"Ramos", 123, 9837, 30.5}
 	fmt.Println("Initial balance -> ", newAccount.balance)
@@ -68,5 +87,9 @@ func main() {
 	fmt.Println("")
 	fmt.Println("Trying withdraw operation with 130...")
 	fmt.Println(newAccount.withdraw(130))
+
+	fmt.Println("")
+	fmt.Println("Trying deposit operation with 130...")
+	fmt.Println(newAccount.deposit(130))
 
 }
