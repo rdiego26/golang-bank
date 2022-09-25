@@ -5,21 +5,21 @@ import (
 	"golang-bank/customers"
 )
 
-type CheckingAccount struct {
-	Owner                     customers.AccountOwner
-	BranchCode, AccountNumber int
-	balance                   float64
+type SavingAccount struct {
+	Owner                                customers.AccountOwner
+	BranchCode, AccountNumber, Operation int
+	balance                              float64
 }
 
-func (account *CheckingAccount) messageAfterOperation() {
+func (account *SavingAccount) messageAfterOperation() {
 	fmt.Printf("(%s) balance after operation -> %.2f\n", account.Owner.Name, account.balance)
 }
 
-func (account *CheckingAccount) GetBalance() float64 {
+func (account *SavingAccount) GetBalance() float64 {
 	return account.balance
 }
 
-func (account *CheckingAccount) Withdraw(requestedValue float64) Message {
+func (account *SavingAccount) Withdraw(requestedValue float64) Message {
 	timeToCalculations()
 
 	allowed := requestedValue > 0 && requestedValue <= account.balance
@@ -34,7 +34,7 @@ func (account *CheckingAccount) Withdraw(requestedValue float64) Message {
 	}
 }
 
-func (account *CheckingAccount) Deposit(requestedValue float64) Message {
+func (account *SavingAccount) Deposit(requestedValue float64) Message {
 	timeToCalculations()
 
 	allowed := requestedValue > 0
@@ -50,7 +50,7 @@ func (account *CheckingAccount) Deposit(requestedValue float64) Message {
 
 }
 
-func (account *CheckingAccount) Transfer(requestedValue float64, destinationAccount *CheckingAccount) Message {
+func (account *SavingAccount) Transfer(requestedValue float64, destinationAccount *SavingAccount) Message {
 	timeToCalculations()
 
 	allowed := requestedValue > 0 && account.balance >= requestedValue
