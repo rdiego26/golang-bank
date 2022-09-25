@@ -10,7 +10,7 @@ type CheckingAccount struct {
 	Owner         customers.AccountOwner
 	BranchCode    int
 	AccountNumber int
-	Balance       float64
+	balance       float64
 }
 
 type Message string
@@ -25,20 +25,26 @@ func timeToCalculations() {
 }
 
 func messageAfterOperation(account *CheckingAccount) {
-	fmt.Printf("(%s) Balance after operation -> %.2f\n", account.Owner.Name, account.Balance)
+	fmt.Printf("(%s) balance after operation -> %.2f\n", account.Owner.Name, account.balance)
+}
+
+func (account *CheckingAccount) GetBalance() float64 {
+	timeToCalculations()
+
+	return account.balance
 }
 
 func (account *CheckingAccount) Withdraw(requestedValue float64) Message {
 	timeToCalculations()
 
-	allowed := requestedValue > 0 && requestedValue <= account.Balance
+	allowed := requestedValue > 0 && requestedValue <= account.balance
 	if allowed {
-		account.Balance -= requestedValue
+		account.balance -= requestedValue
 		messageAfterOperation(account)
 
 		return OperationSuccessfully
 	} else {
-		fmt.Println("Your Balance -> ", account.Balance)
+		fmt.Println("Your balance -> ", account.balance)
 		return InsufficientFunds
 	}
 }
@@ -48,12 +54,12 @@ func (account *CheckingAccount) Deposit(requestedValue float64) Message {
 
 	allowed := requestedValue > 0
 	if allowed {
-		account.Balance += requestedValue
+		account.balance += requestedValue
 		messageAfterOperation(account)
 
 		return OperationSuccessfully
 	} else {
-		fmt.Println("Your Balance -> ", account.Balance)
+		fmt.Println("Your balance -> ", account.balance)
 		return "Insufficient funds, we couldn't achieve your request!"
 	}
 
@@ -62,15 +68,15 @@ func (account *CheckingAccount) Deposit(requestedValue float64) Message {
 func (account *CheckingAccount) Transfer(requestedValue float64, destinationAccount *CheckingAccount) Message {
 	timeToCalculations()
 
-	allowed := requestedValue > 0 && account.Balance >= requestedValue
+	allowed := requestedValue > 0 && account.balance >= requestedValue
 	if allowed {
-		account.Balance -= requestedValue
-		destinationAccount.Balance += requestedValue
+		account.balance -= requestedValue
+		destinationAccount.balance += requestedValue
 		messageAfterOperation(account)
 
 		return OperationSuccessfully
 	} else {
-		fmt.Println("Your Balance -> ", account.Balance)
+		fmt.Println("Your balance -> ", account.balance)
 		return InsufficientFunds
 	}
 
