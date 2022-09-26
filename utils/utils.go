@@ -1,7 +1,7 @@
-package accounts
+package utils
 
 import "time"
 
-func timeToCalculations() {
+func TimeToCalculations() {
 	time.Sleep(1 * time.Second)
 }

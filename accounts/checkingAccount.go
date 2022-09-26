@@ -3,6 +3,7 @@ package accounts
 import (
 	"fmt"
 	"golang-bank/customers"
+	"golang-bank/utils"
 )
 
 type CheckingAccount struct {
@@ -20,7 +21,7 @@ func (account *CheckingAccount) GetBalance() float64 {
 }
 
 func (account *CheckingAccount) Withdraw(requestedValue float64) Message {
-	timeToCalculations()
+	utils.TimeToCalculations()
 
 	allowed := requestedValue > 0 && requestedValue <= account.balance
 	if allowed {
@@ -35,7 +36,7 @@ func (account *CheckingAccount) Withdraw(requestedValue float64) Message {
 }
 
 func (account *CheckingAccount) Deposit(requestedValue float64) Message {
-	timeToCalculations()
+	utils.TimeToCalculations()
 
 	allowed := requestedValue > 0
 	if allowed {
@@ -51,7 +52,7 @@ func (account *CheckingAccount) Deposit(requestedValue float64) Message {
 }
 
 func (account *CheckingAccount) Transfer(requestedValue float64, destinationAccount *CheckingAccount) Message {
-	timeToCalculations()
+	utils.TimeToCalculations()
 
 	allowed := requestedValue > 0 && account.balance >= requestedValue
 	if allowed {

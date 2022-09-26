@@ -40,6 +40,14 @@ func comparisonTypes() {
 
 }
 
+func PayBill(account verifyAccount, billValue float64) {
+	account.Withdraw(billValue)
+}
+
+type verifyAccount interface {
+	Withdraw(value float64) accounts.Message
+}
+
 func main() {
 	firstCustomer := customers.AccountOwner{Name: "Ramos", NationalID: "000.000.000-30", Occupation: "Developer"}
 	firstAccount := accounts.CheckingAccount{Owner: firstCustomer, BranchCode: 123, AccountNumber: 9837}
@@ -49,8 +57,8 @@ func main() {
 	secondAccount := accounts.CheckingAccount{Owner: secondCustomer, BranchCode: 123, AccountNumber: 9838}
 	secondAccount.Deposit(130.5)
 
-	fmt.Printf("Initial balance(%s) -> %.2f\n", firstAccount.Owner.Name, firstAccount.GetBalance)
-	fmt.Printf("Initial balance(%s) -> %.2f\n", secondAccount.Owner.Name, secondAccount.GetBalance)
+	fmt.Printf("Initial balance(%s) -> %.2f\n", firstAccount.Owner.Name, firstAccount.GetBalance())
+	fmt.Printf("Initial balance(%s) -> %.2f\n", secondAccount.Owner.Name, secondAccount.GetBalance())
 
 	fmt.Println("")
 	fmt.Printf("(%s) Trying withdraw operation with 13...\n", firstAccount.Owner.Name)
@@ -64,8 +72,13 @@ func main() {
 	fmt.Println(firstAccount.Deposit(130))
 
 	fmt.Println("")
-	fmt.Printf("Actual balance(%s) -> %.2f\n", secondAccount.Owner.Name, secondAccount.GetBalance)
+	fmt.Printf("Actual balance(%s) -> %.2f\n", secondAccount.Owner.Name, secondAccount.GetBalance())
 	fmt.Printf("(%s) Trying transfer operation with 100 to (%s)...\n", secondAccount.Owner.Name,
 		firstAccount.Owner.Name)
 	fmt.Println(secondAccount.Transfer(100, &firstAccount))
+
+	fmt.Println("")
+	fmt.Printf("Actual balance(%s) -> %.2f\n", secondAccount.Owner.Name, secondAccount.GetBalance())
+	fmt.Printf("(%s) Trying pay bill of 10...\n", secondAccount.Owner.Name)
+	PayBill(&secondAccount, 10)
 }
